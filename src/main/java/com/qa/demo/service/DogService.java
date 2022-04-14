@@ -54,17 +54,17 @@ public class DogService implements ServiceIF<Dog>{
 	}
 	
 	// SELECT * FROM Dog WHERE name =
-	public List<Dog> getDogsByName(String name) {
+	public List<Dog> getByName(String name) {
 		return this.repo.findByNameIgnoreCase(name);
 	}
 	
 	// SELECT * FROM Dog WHERE breed = 
-	public List<Dog> getDogsByBreed(String breed) {
+	public List<Dog> getByBreed(String breed) {
 		return this.repo.findByBreedIgnoreCase(breed);
 	}
 	
 	// SELECT * FROM Dog WHERE numberOfLegs =
-	public List<Dog> getDogsByNumberOfLegs(Integer numberOfLegs) {
+	public List<Dog> getByNumberOfLegs(Integer numberOfLegs) {
 		return this.repo.findByNumberOfLegs(numberOfLegs);
 	}
 	

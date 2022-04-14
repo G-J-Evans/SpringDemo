@@ -64,19 +64,19 @@ public class DogController {
 	//read by name
 	@GetMapping("/getByName/{name}") // 200 - OK
 	public ResponseEntity<List<Dog>> getByName(@PathVariable String name) {
-		return new ResponseEntity<>(this.service.getDogsByName(name), HttpStatus.OK);
+		return new ResponseEntity<>(this.service.getByName(name), HttpStatus.OK);
 	}
 	
 	//read by breed
 	@GetMapping("/getByBreed/{breed}") // 200 - OK
 	public ResponseEntity<List<Dog>> getByBreed(@PathVariable String breed) {
-		return new ResponseEntity<>(this.service.getDogsByBreed(breed), HttpStatus.OK);
+		return new ResponseEntity<>(this.service.getByBreed(breed), HttpStatus.OK);
 	}
 	
 	//read by numberOfLegs // 200 - OK
 	@GetMapping("/getByNumberOfLegs/{numberOfLegs}")
 	public ResponseEntity<List<Dog>> getByNumberOfLegs(@PathVariable Integer numberOfLegs) {
-		return new ResponseEntity<>(this.service.getDogsByNumberOfLegs(numberOfLegs), HttpStatus.OK);
+		return new ResponseEntity<>(this.service.getByNumberOfLegs(numberOfLegs), HttpStatus.OK);
 	}
 	
 	//read by random
