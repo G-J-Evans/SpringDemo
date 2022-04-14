@@ -23,6 +23,7 @@ public interface DogRepo extends JpaRepository<Dog, Integer> {
 	List<Dog> findByBreedIgnoreCase(String breed);
 	Integer countBy();
 	
+	// Used for obtaining a random result
 	@Query(value = "SELECT * FROM dog ORDER BY id LIMIT :n, 1", nativeQuery = true)
 	Dog findNthPlusOneDogOrderByIdAsc(@Param("n") Integer n);
 }

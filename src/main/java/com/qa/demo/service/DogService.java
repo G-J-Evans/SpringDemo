@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.qa.demo.domain.Dog;
 import com.qa.demo.repo.DogRepo;
@@ -27,17 +29,17 @@ public class DogService implements ServiceIF<Dog>{
 		return this.repo.save(dog);
 	}
 	
-	//readAll // SELECT * FROM Person
+	//readAll // SELECT * FROM Dog
 	public List<Dog> getAll() {
 		return this.repo.findAll();
 	}
 	
-	//readOne // SELECT * FROM Person WHERE ID =
+	//readOne // SELECT * FROM Dog WHERE ID =
 	public Dog getOne(Integer id) {
 		return this.repo.findById(id).get();
 	}
 	
-	//replace 
+	//replace // UPDATE Dog SET name = , breed =, number_of_legs = WHERE id = 
 	public Dog replace(Integer id, Dog newDog) {
 		Dog existing = this.repo.findById(id).get();
 		existing.setBreed(newDog.getBreed());
@@ -46,7 +48,7 @@ public class DogService implements ServiceIF<Dog>{
 		return this.repo.save(existing);
 	}
 	
-	//delete // DELETE FROM PERSON WHERE ID =
+	//delete // DELETE FROM Dog WHERE id =
 	public void remove(Integer id) {
 		this.repo.deleteById(id);
 	}
@@ -66,16 +68,12 @@ public class DogService implements ServiceIF<Dog>{
 		return this.repo.findByNumberOfLegs(numberOfLegs);
 	}
 	
-	// SELECT * FROM Dog WHERE = random
+	// SELECT * FROM Dog WHERE (random) // Not real MySQL :)
 	public Dog getRandom() {
-		// returns number of dog
 		Integer noOfDogs = this.repo.countBy();
-		// Checks there is data
 		if(noOfDogs == 0) {
-			// throw some Exception
-			return new Dog();
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Database has no entries");
 		}
-		// gets a random number n between 0 and noOfDogs -1, returns (n+1)th dog
 		return this.repo.findNthPlusOneDogOrderByIdAsc(new Random().nextInt(noOfDogs));
 	}
 }
