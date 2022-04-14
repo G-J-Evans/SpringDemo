@@ -1,8 +1,6 @@
 package com.qa.demo.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +66,7 @@ public class DogService implements ServiceIF<Dog>{
 		return this.repo.findByNumberOfLegs(numberOfLegs);
 	}
 	
-	// SELECT * FROM Dog WHERE ID = random
+	// SELECT * FROM Dog WHERE = random
 	public Dog getRandom() {
 		// returns number of dog
 		Integer noOfDogs = this.repo.countBy();
@@ -77,11 +75,7 @@ public class DogService implements ServiceIF<Dog>{
 			// throw some Exception
 			return new Dog();
 		}
-		// needed for calling a random number
-		Random random = new Random();
-		// returns number between 0 and noOfDogs - 1
-		Integer randomNo = random.nextInt(noOfDogs);
-		Dog randomDog = this.repo.findNthPlusOneDogOrderByIdAsc(randomNo);
-		return randomDog;
+		// gets a random number n between 0 and noOfDogs -1, returns (n+1)th dog
+		return this.repo.findNthPlusOneDogOrderByIdAsc(new Random().nextInt(noOfDogs));
 	}
 }
