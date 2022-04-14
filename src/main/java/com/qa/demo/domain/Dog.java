@@ -1,10 +1,27 @@
 package com.qa.demo.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity // tells spring it's a table
 public class Dog {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@Column(nullable = false)
 	private String name;
+	
+	@Column(nullable = false)
 	private String breed;
+	
+	@Column(nullable = false)
 	private Integer numberOfLegs;
+	
 	public Dog(Integer id, String name, String breed, Integer numberOfLegs) {
 		super();
 		this.id = id;
@@ -15,6 +32,7 @@ public class Dog {
 	public Dog() {
 		super();
 	}
+	
 	public Integer getId() {
 		return id;
 	}

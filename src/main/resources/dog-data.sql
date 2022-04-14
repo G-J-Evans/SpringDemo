@@ -1,0 +1,1 @@
+insert into dog (name, breed, number_of_legs) values ('Jimmy', 'Hound', 4);

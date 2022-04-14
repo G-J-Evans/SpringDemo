@@ -1,8 +1,8 @@
 package com.qa.demo.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,71 +14,74 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.qa.demo.domain.Dog;
+import com.qa.demo.service.DogService;
 
 @RestController
 public class DogController {
-
-	// just for storing data, we will delete after we start using a db
-	private List<Dog> dogs = new ArrayList<>();
+	
+	private DogService service;
+	
+	@Autowired //tells spring to fetch the DogService from the context
+	public DogController(DogService service) {
+		super();
+		this.service = service;
+	}
 	
 	// --- CRUD functionality ---
 	// ResponseEntity is an extension of HttpEntity that represents a HTTP response including status code, headers and body
 	
 	//create
-	@PostMapping("/create") // 201 - created
+	@PostMapping("/create") // 201 - CREATED
 	public ResponseEntity<Dog> createDog(@RequestBody Dog dog) {
-		try {
-			this.dogs.add(dog);
-			return new ResponseEntity<Dog>(this.dogs.get(this.dogs.size()-1), HttpStatus.CREATED);
-		} catch(Error e) {
-			System.out.println(e);
-			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
-		}
+			return new ResponseEntity<>(this.service.create(dog), HttpStatus.CREATED);
 	}
 	
 	//read all
-	@GetMapping("/getAll") // 200 - ok
+	@GetMapping("/getAll") // 200 - OK
 	public ResponseEntity<List<Dog>>  getAll() {
-		try {
-			return new ResponseEntity<List<Dog>>(this.dogs, HttpStatus.OK);
-		} catch(Error e) {
-			System.out.println(e);
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+			return new ResponseEntity<>(this.service.getAll(), HttpStatus.OK);
 	}
 	
-	//read one
-	@GetMapping("/get/{id}") // 200 - ok
-	public ResponseEntity<Dog> getDog(@PathVariable Integer id) {
-		try {
-			return new ResponseEntity<Dog>(dogs.get(id), HttpStatus.OK);
-		} catch(Error e) {
-			System.out.println(e);
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+	//read one by id
+	@GetMapping("/get/{id}") // 200 - OK
+	public ResponseEntity<Dog> getOne(@PathVariable Integer id) {
+			return new ResponseEntity<>(this.service.getOne(id), HttpStatus.OK);
 	}
 	
 	//update
-	@PutMapping("/replace/{id}") // 202 - accepted
-	public ResponseEntity<Dog> replaceDog(@PathVariable Integer id, @RequestBody Dog dog) {
-		try {
-			return new ResponseEntity<Dog>(dogs.set(id, dog), HttpStatus.ACCEPTED);
-		} catch(Error e) {
-			System.out.println(e);
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+	@PutMapping("/replace/{id}") // 202 - ACCEPTED
+	public ResponseEntity<Dog> replace(@PathVariable Integer id, @RequestBody Dog dog) {
+			return new ResponseEntity<>(this.service.replace(id, dog), HttpStatus.ACCEPTED);
 	}
 	
 	//delete
-	@DeleteMapping("/remove/{id}") // No content
-	public ResponseEntity<?> deleteDog(@PathVariable Integer id) {
-		try {
-			this.dogs.remove(id.intValue());
+	@DeleteMapping("/remove/{id}") // 204 - NO CONTENT
+	public ResponseEntity<?> delete(@PathVariable Integer id) {
+			this.service.remove(id);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch(Error e) {
-			System.out.println(e);
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
 	}
 	
+	//read by name
+	@GetMapping("/getByName/{name}") // 200 - OK
+	public ResponseEntity<List<Dog>> getByName(@PathVariable String name) {
+		return new ResponseEntity<>(this.service.getDogsByName(name), HttpStatus.OK);
+	}
+	
+	//read by breed
+	@GetMapping("/getByBreed/{breed}") // 200 - OK
+	public ResponseEntity<List<Dog>> getByBreed(@PathVariable String breed) {
+		return new ResponseEntity<>(this.service.getDogsByBreed(breed), HttpStatus.OK);
+	}
+	
+	//read by numberOfLegs // 200 - OK
+	@GetMapping("/getByNumberOfLegs/{numberOfLegs}")
+	public ResponseEntity<List<Dog>> getByNumberOfLegs(@PathVariable Integer numberOfLegs) {
+		return new ResponseEntity<>(this.service.getDogsByNumberOfLegs(numberOfLegs), HttpStatus.OK);
+	}
+	
+	//read by random
+	@GetMapping("/get/random") // 200 - OK
+	public ResponseEntity<Dog> getRandom() {
+		return new ResponseEntity<>(this.service.getRandom(), HttpStatus.OK);
+	}
 }
