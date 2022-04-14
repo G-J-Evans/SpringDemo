@@ -74,7 +74,7 @@ public class DogService implements ServiceIF<Dog>{
 		Integer noOfDogs = this.repo.countBy();
 		// Checks there is data
 		if(noOfDogs == 0) {
-			// throw some error
+			// throw some Exception
 			return new Dog();
 		}
 		// needed for calling a random number
