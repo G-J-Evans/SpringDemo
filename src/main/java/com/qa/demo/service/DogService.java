@@ -2,6 +2,7 @@ package com.qa.demo.service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,34 +70,53 @@ public class DogService implements ServiceIF<Dog>{
 	
 	// SELECT * FROM Dog WHERE ID = random
 	public Dog getRandom() {
-		// returns highest ID dog
-		Dog maxIdDog = this.repo.findFirstByOrderByIdDesc();
+		// returns number of dog
+		Integer noOfDogs = this.repo.countBy();
+		System.out.println(noOfDogs);
 		// Checks there is data
-		if(maxIdDog == null) {
+		if(noOfDogs == 0) {
 			// throw some error
 			return new Dog();
 		}
-		
-		// gets the id of the dog for inserting into the random number generator
-		Integer maxId = maxIdDog.getId();
-		
-//		System.out.println("maxId: " + maxId);
-
 		// needed for calling a random number
 		Random random = new Random();
-		
-		// loop so that if random id has been deleted try again.
-		boolean flag = true;
-		while (flag) {
-			Integer randomId = random.nextInt(maxId) + 1;
-//			System.out.println("Random Id:" + randomId);
-			try {
-				Dog randomDog = this.repo.findById(randomId).get();
-				return randomDog;
-			} catch (NoSuchElementException e) {
-				// continue the loop, try another random number
-			}
-		}
-		return new Dog();
+		// returns number between 0 and noOfDogs - 1
+		Integer randomNo = random.nextInt(noOfDogs);
+		System.out.println("Random No: " + randomNo);
+		Dog randomDog = this.repo.findNthPlusOneDogOrderByIdAsc(randomNo);
+		return randomDog;
 	}
+	
+//	// SELECT * FROM Dog WHERE ID = random
+//	public Dog getRandom() {
+//		// returns highest ID dog
+//		Dog maxIdDog = this.repo.findFirstByOrderByIdDesc();
+//		// Checks there is data
+//		if(maxIdDog == null) {
+//			// throw some error
+//			return new Dog();
+//		}
+//		
+//		// gets the id of the dog for inserting into the random number generator
+//		Integer maxId = maxIdDog.getId();
+//		
+////		System.out.println("maxId: " + maxId);
+//
+//		// needed for calling a random number
+//		Random random = new Random();
+//		
+//		// loop so that if random id has been deleted try again.
+//		boolean flag = true;
+//		while (flag) {
+//			Integer randomId = random.nextInt(maxId) + 1;
+////			System.out.println("Random Id:" + randomId);
+//			try {
+//				Dog randomDog = this.repo.findById(randomId).get();
+//				return randomDog;
+//			} catch (NoSuchElementException e) {
+//				// continue the loop, try another random number
+//			}
+//		}
+//		return new Dog();
+//	}
 }

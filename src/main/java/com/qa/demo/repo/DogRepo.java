@@ -3,6 +3,8 @@ package com.qa.demo.repo;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.qa.demo.domain.Dog;
@@ -20,4 +22,8 @@ public interface DogRepo extends JpaRepository<Dog, Integer> {
 	List<Dog> findByNumberOfLegs(Integer numberOfLegs);
 	List<Dog> findByBreedIgnoreCase(String breed);
 	Dog findFirstByOrderByIdDesc();
+	Integer countBy();
+	
+	@Query(value = "SELECT * FROM dog ORDER BY id LIMIT :n, 1", nativeQuery = true)
+	Dog findNthPlusOneDogOrderByIdAsc(@Param("n") Integer n);
 }
