@@ -21,7 +21,6 @@ public interface DogRepo extends JpaRepository<Dog, Integer> {
 	List<Dog> findByNameIgnoreCase(String name);
 	List<Dog> findByNumberOfLegs(Integer numberOfLegs);
 	List<Dog> findByBreedIgnoreCase(String breed);
-	Dog findFirstByOrderByIdDesc();
 	Integer countBy();
 	
 	@Query(value = "SELECT * FROM dog ORDER BY id LIMIT :n, 1", nativeQuery = true)
