@@ -73,6 +73,7 @@ public class DogService implements ServiceIF<Dog>{
 		Dog maxIdDog = this.repo.findFirstByOrderByIdDesc();
 		// Checks there is data
 		if(maxIdDog == null) {
+			// throw some error
 			return new Dog();
 		}
 		
